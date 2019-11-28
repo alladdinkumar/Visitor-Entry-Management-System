@@ -208,7 +208,7 @@ def Check_in_out():
         top.withdraw()
     window=1
     top = Toplevel()
-    top.title("Input Page")
+    top.title("check in check out Page")
     top.wm_attributes('-fullscreen', 'true')
     bg = PhotoImage(master=top,file="bg.png")
     Label(top, image=bg).place(relwidth=1, relheight=1)
@@ -346,13 +346,13 @@ def Id_display():
     
 def check_out():
 
-    global top,window,ID,check_out
+    global top,window,ID,check_out1
     
     if window==1:
         top.withdraw()
     window=1
     top = Toplevel()
-    top.title("Input Page")
+    top.title("check out Page")
     top.wm_attributes('-fullscreen', 'true')
     bg = PhotoImage(master=top,file="bg.png")
     Label(top, image=bg).place(relwidth=1, relheight=1)
@@ -363,19 +363,19 @@ def check_out():
     Label(top, text="Check Out Time*: ", fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=290)
     ID = Entry(top, font=("Arial",12))
     ID.place(x=720, y=260)
-    check_out = Entry(top, font=("Arial",12))
-    check_out.place(x=720, y=290)
+    check_out1 = Entry(top, font=("Arial",12))
+    check_out1.place(x=720, y=290)
     start_img = PhotoImage(file="continue.png")
     Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=check_database).place(x=640, y=590) 
     top.mainloop()
 def check_database():
     global top,window,ID,update_id,det
-    print("input")
+    
     if window==1:
         top.withdraw()
     window=1
     top = Toplevel()
-    top.title("Input Page")
+    top.title("check database Page")
     top.wm_attributes('-fullscreen', 'true')
     bg = PhotoImage(master=top,file="bg.png")
     Label(top, image=bg).place(relwidth=1, relheight=1)
@@ -411,20 +411,20 @@ def check_database():
     conn.close()
     start_img = PhotoImage(file="continue.png")
     Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=Update_database).place(x=640, y=590) 
-    b3=Button(top,justify = LEFT)
-    photo3=PhotoImage(file="backbutton.png")
-    b3.config(image=photo3,width="200",height="55",activebackground="#f15922",bg="#005367",bd=0,command=check_out)
-    b3.place(x=900,y=600)
+
+    back_img = PhotoImage(file="backbutton.png")
+    Button(top, text="Click Here",width="200",height="55", relief=RIDGE, image=back_img, bg=darkBG, activebackground=darkBG, bd=0, command=Check_in_out).place(x=850, y=615) 
+    
     top.mainloop()  
 def Update_database():
-    global conn, cursor,flag,update_id,check_out,det
+    global conn, cursor,flag,update_id,check_out1,det
     conn = sqlite3.connect("user.db")
     cursor = conn.cursor()
-    cursor.execute("UPDATE user_details SET check_out = ? WHERE mem_id= ?",(check_out.get(),update_id))
+    cursor.execute("UPDATE user_details SET check_out = ? WHERE mem_id= ?",(check_out1.get(),update_id))
     conn.commit()
     cursor.close()
     conn.close()
-    message="Visitors details:- \nName "+str(det[1])+"\nEmail "+str(det[6])+"\nPhone "+str(det[3])+"\nCheck in time "+str(det[4])+"\nCheck out time "+str(check_out.get())+"\nHost details :- "+"\nHost name "+str(det[7])+"\nPhone number "+str(det[8])+"\nEmail address "+str(det[9])
+    message="Visitors details:- \nName "+str(det[1])+"\nEmail "+str(det[6])+"\nPhone "+str(det[3])+"\nCheck in time "+str(det[4])+"\nCheck out time "+str(check_out1.get())+"\nHost details :- "+"\nHost name "+str(det[7])+"\nPhone number "+str(det[8])+"\nEmail address "+str(det[9])
     print(message)
     try:
         email(det[4],message)
