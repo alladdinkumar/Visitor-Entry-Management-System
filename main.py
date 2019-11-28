@@ -1,5 +1,53 @@
 from tkinter import *
 import sqlite3
+
+#Email id and password for sending email
+sender='Example@gmail.com'
+password='password'
+#Sinch Rest Api service id and token for sending SMS
+service_plan_id='4963f07d6b3f41eda2b1407657f6c69d'
+token='a2da539ab75843c6afb1ea19ec1108ec'
+
+def email(reciever,message):
+    import smtplib 
+
+    # creates SMTP session 
+    s = smtplib.SMTP(host='smtp.gmail.com', port=587) 
+
+    # start TLS for security 
+    s.starttls() 
+
+    # Authentication 
+    s.login(sender, password) 
+
+    # message to be sent 
+    message = "Message_you_need_to_send"
+
+    # sending the mail 
+    s.sendmail(sender, reciever, message) 
+
+    # terminating the session 
+    s.quit()
+# python script for sending message update 
+
+
+
+
+import clx.xms
+import requests
+def SMS(number,message):
+    client = clx.xms.Client(service_plan_id={'4963f07d6b3f41eda2b1407657f6c69d'}, token={'a2da539ab75843c6afb1ea19ec1108ec'})
+
+    create = clx.xms.api.MtBatchTextSmsCreate()
+    create.sender = '12345'
+    create.recipients = {number}
+    create.body = message
+
+    try:
+        batch = client.create_batch(create)
+    except(requests.exceptions.RequestException,clx.xms.exceptions.ApiException) as ex:
+        print('Failed to communicate with XMS: %s' % str(ex))
+
 def Signup_window():
     global top,window
     
@@ -155,7 +203,6 @@ def Login():
     #lbl_text.config(text="")
 def Check_in_out():
     global top,window
-    print("input")
     if window==1:
         top.withdraw()
     window=1
@@ -176,7 +223,7 @@ def check_in():
     #filling_details
     global top,window
     global name,gender,phone,email_address,check_in,host_name,host_phone,host_email
-    print("input")
+   
     if window==1:
         top.withdraw()
     window=1
@@ -268,7 +315,7 @@ def Input_Database():
     Id_display()
 
 def Id_display():
-    global top,window,check_in_id
+    global top,window,name,host_name,check_in,gender,phone,email_address,host_phone,host_email,check_in_id
     print("input")
     if window==1:
         top.withdraw()
@@ -283,12 +330,22 @@ def Id_display():
     Label(top,text="Your Check In Id is :-"+str(check_in_id), font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=490,y=130)
     start_img = PhotoImage(file="continue.png")
     Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=Check_in_out).place(x=640, y=590) 
+    message="Visitors details:- \n Name"+str(name.get())+"\nEmail "+str(email_address.get())+"\nPhone "+str(phone.get())+"\nCheck in time "+str(check_in.get())
+    print(message)
+    try:
+        email(host_email.get(),message)
+        SMS(host_phone.get(),message)
+    except:
+        print("please enter the email address and password in the starting of the code also the credentials for Sinch application" )
+   
+        
+        
     top.mainloop()
     
 def check_out():
 
     global top,window,ID,check_out
-    print("input")
+    
     if window==1:
         top.withdraw()
     window=1
@@ -310,7 +367,7 @@ def check_out():
     Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=check_database).place(x=640, y=590) 
     top.mainloop()
 def check_database():
-    global top,window,ID,update_id
+    global top,window,ID,update_id,det
     print("input")
     if window==1:
         top.withdraw()
@@ -326,7 +383,7 @@ def check_database():
     conn = sqlite3.connect("user.db")
     cursor = conn.cursor()
     update_id=ID.get()
-    cursor.execute("SELECT * FROM user_details WHERE mem_id= ? ", (update_id))
+    cursor.execute("SELECT * FROM user_details WHERE mem_id= ? ", (ID.get()))
     det=cursor.fetchone()
     if det is None:
         Label(top,text="User does not exist", font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=490,y=130)
@@ -358,13 +415,21 @@ def check_database():
     b3.place(x=900,y=600)
     top.mainloop()  
 def Update_database():
-    global conn, cursor,flag,update_id,check_out
+    global conn, cursor,flag,update_id,check_out,det
     conn = sqlite3.connect("user.db")
     cursor = conn.cursor()
     cursor.execute("UPDATE user_details SET check_out = ? WHERE mem_id= ?",(check_out.get(),update_id))
     conn.commit()
     cursor.close()
     conn.close()
+    message="Visitors details:- \nName "+str(det[1])+"\nEmail "+str(det[4])+"\nPhone "+str(det[3])+"\nCheck in time "+str(det[6])+"\nCheck out time "+str(check_out.get())+"\nHost details :- "+"\nHost name "+str(det[7])+"\nPhone number "+str(det[8])+"\nEmail address "+str(det[9])
+    print(message)
+    try:
+        email(det[4],message)
+        SMS(det[3],message)
+    except:
+        print("please enter the email address and password in the starting of the code also the credentials for Sinch application" )
+   
     Check_in_out()
     
 lightBG, darkBG = "#eafde7", "#44484b"    
