@@ -114,6 +114,7 @@ def Database_Signup():
     
     try:
         cursor.execute("CREATE TABLE member (mem_id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT, username TEXT, password TEXT)")
+        cursor.execute("INSERT INTO member (username, password) VALUES(?,?)",(USERNAME.get(), PASSWORD.get()))
         
     except:
         cursor.execute("INSERT INTO member (username, password) VALUES(?,?)",(USERNAME.get(), PASSWORD.get()))
@@ -212,11 +213,12 @@ def Check_in_out():
     bg = PhotoImage(master=top,file="bg.png")
     Label(top, image=bg).place(relwidth=1, relheight=1)
     close = PhotoImage(master=top, file="close.png")
+    Label(top,text="Visitor Entry Management", font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=350,y=130)
     check_in1 = PhotoImage(master=top, file="check_in.png")
     check_out1 = PhotoImage(master=top, file="check_out.png")
     Button(top, bd=0, image=close, bg=lightBG, activebackground=lightBG, command=top.destroy).place(x=1320,y=10)
-    Button(top, bd=0, image=check_in1, bg=lightBG, activebackground=lightBG, command=check_in).place(x=400,y=300)
-    Button(top, bd=0, image=check_out1, bg=lightBG, activebackground=lightBG, command=check_out).place(x=600,y=300)
+    Button(top, bd=0, image=check_in1, bg=lightBG, activebackground=lightBG, command=check_in).place(x=350,y=300)
+    Button(top, bd=0, image=check_out1, bg=lightBG, activebackground=lightBG, command=check_out).place(x=700,y=300)
     top.mainloop()
 
 def check_in():
@@ -235,21 +237,21 @@ def check_in():
     close = PhotoImage(master=top, file="close.png")
     Button(top, bd=0, image=close, bg=lightBG, activebackground=lightBG, command=top.destroy).place(x=1320,y=10)
     Label(top,text="Enter the Details", font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=490,y=130)
-    Label(top, text="Name*: ", fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=260)
+    Label(top, text="Name*: ", fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=230)
     #gender
-    Label(top, text="Gender*: ",fg="#27292b" , font=("Arial Black",12), bg=lightBG). place(x=520, y=290)
+    Label(top, text="Gender*: ",fg="#27292b" , font=("Arial Black",12), bg=lightBG). place(x=520, y=260)
     
-    Label(top, text="Phone Number*: ", fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=320)
+    Label(top, text="Phone Number*: ", fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=290)
 
-    Label(top, text="Email Address*: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=350)
+    Label(top, text="Email Address*: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=320)
     
-    Label(top, text="Check-in time*: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=390)
+    Label(top, text="Check-in time*: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=350)
         
-    Label(top, text="Host name*: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=430)
+    Label(top, text="Host name*: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=390)
 
-    Label(top, text="Host Phone Number *: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=470)
+    Label(top, text="Host Phone Number *: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=430)
 
-    Label(top, text="Host Email Address *: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=510)
+    Label(top, text="Host Email Address *: ",fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=470)
 
     name = Entry(top, font=("Arial",12)) 
     gender=IntVar()   
@@ -260,15 +262,15 @@ def check_in():
     host_phone = Entry(top, font=("Arial",12))
     host_email = Entry(top, font=("Arial",12))
     
-    name.place(x=720, y=260)
-    phone.place(x=720, y=320)
-    check_in.place(x=720, y=350)
-    email_address.place(x=720, y=390)
-    host_name.place(x=720, y=430)
-    host_phone.place(x=720, y=470)
-    host_email.place(x=720,y=510)
-    Radiobutton(top, text="Male",font=("Arial",12),  variable=gender, value=1).place(x=720, y=290)
-    Radiobutton(top, text="Female",font=("Arial",12), variable=gender, value=2).place(x=820, y=290)
+    name.place(x=780, y=230)
+    phone.place(x=780, y=290)
+    check_in.place(x=780, y=350)
+    email_address.place(x=780, y=320)
+    host_name.place(x=780, y=390)
+    host_phone.place(x=780, y=430)
+    host_email.place(x=780,y=470)
+    Radiobutton(top, text="Male",font=("Arial",12),  variable=gender, value=1).place(x=780, y=260)
+    Radiobutton(top, text="Female",font=("Arial",12), variable=gender, value=2).place(x=880, y=260)
 
     lbl_text = Label(top)
     lbl_text.place(x=50,y=50)
@@ -303,7 +305,7 @@ def Input_Database():
     try:
         cursor.execute("INSERT INTO user_details (name,gender,phone,check_in,check_out,email_address,host_name,host_phone,host_email) VALUES(?,?,?,?,?,?,?,?,?)",(name.get(), Gen, phone.get(), check_in.get(),"Nil",email_address.get(), host_name.get(), host_phone.get(),host_email.get()))
         cursor.execute("SELECT mem_id FROM user_details ORDER BY mem_id DESC LIMIT 1")
-        check_in_id=cursor.fetchone()
+        check_in_id=list(cursor.fetchone())[0]
     except:
         cursor.execute("CREATE TABLE user_details (mem_id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT, name TEXT, gender TEXT, phone TEXT, check_in TEXT, check_out TEXT, email_address TEXT, host_name TEXT, host_phone TEXT, host_email TEXT)")
         cursor.execute("INSERT INTO user_details (name,gender,phone,check_in,check_out,email_address,host_name,host_phone,host_email) VALUES(?,?,?,?,?,?,?,?,?)",(name.get(), Gen, phone.get(), check_in.get(),"Nil",email_address.get(), host_name.get(), host_phone.get(),host_email.get()))
@@ -330,7 +332,7 @@ def Id_display():
     Label(top,text="Your Check In Id is :-"+str(check_in_id), font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=490,y=130)
     start_img = PhotoImage(file="continue.png")
     Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=Check_in_out).place(x=640, y=590) 
-    message="Visitors details:- \n Name"+str(name.get())+"\nEmail "+str(email_address.get())+"\nPhone "+str(phone.get())+"\nCheck in time "+str(check_in.get())
+    message="Visitors details:- \nName "+str(name.get())+"\nEmail "+str(email_address.get())+"\nPhone "+str(phone.get())+"\nCheck in time "+str(check_in.get())
     print(message)
     try:
         email(host_email.get(),message)
@@ -389,21 +391,21 @@ def check_database():
         Label(top,text="User does not exist", font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=490,y=130)
     else:
         det=list(det)
-        Label(top, text="Name*: "+str(det[1]), fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=260)
+        Label(top, text="Name*: "+str(det[1]), fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=230)
         #gender
-        Label(top, text="Gender*: "+str(det[2]),fg="#27292b" , font=("Arial Black",12), bg=lightBG). place(x=520, y=290)
+        Label(top, text="Gender*: "+str(det[2]),fg="#27292b" , font=("Arial Black",12), bg=lightBG). place(x=520, y=260)
         
-        Label(top, text="Phone Number*: "+str(det[3]), fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=320)
+        Label(top, text="Phone Number*: "+str(det[3]), fg="#27292b",font=("Arial Black",12), bg=lightBG).place(x=520, y=290)
 
-        Label(top, text="Email Address*: "+str(det[4]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=350)
+        Label(top, text="Email Address*: "+str(det[6]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=320)
         
-        Label(top, text="Check-in time*: "+str(det[6]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=390)
+        Label(top, text="Check-in time*: "+str(det[4]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG).place(x=520,y=350)
             
-        Label(top, text="Host name*: "+str(det[7]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=430)
+        Label(top, text="Host name*: "+str(det[7]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=390)
 
-        Label(top, text="Host Phone Number *: "+str(det[8]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=470)
+        Label(top, text="Host Phone Number *: "+str(det[8]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=430)
 
-        Label(top, text="Host Email Address *: "+str(det[9]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=510)
+        Label(top, text="Host Email Address *: "+str(det[9]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=470)
     conn.commit()
     cursor.close()
     conn.close()
@@ -422,7 +424,7 @@ def Update_database():
     conn.commit()
     cursor.close()
     conn.close()
-    message="Visitors details:- \nName "+str(det[1])+"\nEmail "+str(det[4])+"\nPhone "+str(det[3])+"\nCheck in time "+str(det[6])+"\nCheck out time "+str(check_out.get())+"\nHost details :- "+"\nHost name "+str(det[7])+"\nPhone number "+str(det[8])+"\nEmail address "+str(det[9])
+    message="Visitors details:- \nName "+str(det[1])+"\nEmail "+str(det[6])+"\nPhone "+str(det[3])+"\nCheck in time "+str(det[4])+"\nCheck out time "+str(check_out.get())+"\nHost details :- "+"\nHost name "+str(det[7])+"\nPhone number "+str(det[8])+"\nEmail address "+str(det[9])
     print(message)
     try:
         email(det[4],message)
