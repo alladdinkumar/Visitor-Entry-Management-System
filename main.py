@@ -385,7 +385,8 @@ def check_database():
     conn = sqlite3.connect("user.db")
     cursor = conn.cursor()
     update_id=ID.get()
-    cursor.execute("SELECT * FROM user_details WHERE mem_id= ? ", (ID.get()))
+    update_id=int(update_id)
+    cursor.execute("SELECT * FROM user_details WHERE mem_id= ? ", (update_id ,))
     det=cursor.fetchone()
     if det is None:
         Label(top,text="User does not exist", font=("Courier",30,"bold underline"),bg=lightBG, fg="#27292b").place(x=490,y=130)
@@ -406,12 +407,13 @@ def check_database():
         Label(top, text="Host Phone Number *: "+str(det[8]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=430)
 
         Label(top, text="Host Email Address *: "+str(det[9]),fg="#27292b" ,font=("Arial Black",12), bg=lightBG). place(x=520, y=470)
+        start_img = PhotoImage(file="continue.png")
+        Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=Update_database).place(x=640, y=590) 
+
     conn.commit()
     cursor.close()
     conn.close()
-    start_img = PhotoImage(file="continue.png")
-    Button(top, text="Click Here", relief=RIDGE, image=start_img, bg=darkBG, activebackground=darkBG, bd=0, command=Update_database).place(x=640, y=590) 
-
+   
     back_img = PhotoImage(file="backbutton.png")
     Button(top, text="Click Here",width="200",height="55", relief=RIDGE, image=back_img, bg=darkBG, activebackground=darkBG, bd=0, command=Check_in_out).place(x=850, y=615) 
     
